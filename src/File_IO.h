@@ -13,7 +13,7 @@ bool read_infile(char* path, Octree<body> &structure, int &num_dim);
 
 bool write_outfile(char* path, Octree<body> &structure, int &num_dim);
 
-
+bool write_logfile(char* path, Octree<body> &structure, int step, int &num_dim);
 
 
 

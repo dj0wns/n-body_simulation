@@ -18,10 +18,10 @@ public:
 	//default constructor
 	Octree() : leaf_node(false), left(0), right(0),  mass(-1) {};
 
-	void print(){//print contents of the tree along with other information
+	void print(int num_dim){//print contents of the tree along with other information
 		printf("Size: %u\n", object_list.size());
 		for(auto it = object_list.begin(); it < object_list.end(); ++it){
-			it->print();
+			it->print(num_dim);
 
 		}
 	}

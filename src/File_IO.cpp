@@ -1,4 +1,25 @@
 #include "File_IO.h"
+#include <string>
+#include <cstring>
+#include <algorithm>
+
+bool write_logfile(char* path, Octree<body> &structure, int step, int &num_dim){
+	std::ofstream fout;
+	std::string temp = path;
+
+	//TODO: add code to append step to log file
+	//	temp += "_" + itoa(step);
+	fout.open(temp);
+	char output[256];
+	for(auto it = structure.object_list.begin(); it < structure.object_list.end(); ++it){
+		it->toString(num_dim, output);	
+		fout << output;
+
+	}
+	return true;
+}
+
+
 
 bool write_outfile(char* path, Octree<body> &structure, int &num_dim){
 	std::ofstream fout;
