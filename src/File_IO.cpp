@@ -12,7 +12,7 @@ bool write_outfile(char* path, Octree<body> &structure, int &num_dim){
 		fout << output;
 
 	}
-
+	return true;
 }
 
 bool read_infile(char* path, Octree<body> &structure, int &num_dim){

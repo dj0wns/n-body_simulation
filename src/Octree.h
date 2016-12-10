@@ -6,7 +6,6 @@
 #include <vector>
 #include <cstdio>
 
-enum axis {X_Axis, Y_Axis, Z_Axis, NONE};
 
 
 template <typename T> class Octree  {
@@ -17,24 +16,24 @@ public:
 
 
 	//default constructor
-	Octree() : leaf_node(false), left(0), right(0), division(NONE), mass(-1) {};
+	Octree() : leaf_node(false), left(0), right(0),  mass(-1) {};
 
-	void create(); //recursively create tree using objects in object_list
-	
 	void print(){//print contents of the tree along with other information
-		printf("Size: %d\n", object_list.size());
+		printf("Size: %u\n", object_list.size());
 		for(auto it = object_list.begin(); it < object_list.end(); ++it){
 			it->print();
 
 		}
 	}
+
+	void create();//recursively create tree using objects in object_list
+
 private:		
 	bool leaf_node;
 
 	Octree *left; //left children
 	Octree *right; //right children
 	
-	axis division; //which axis the tree is divided on
 	
 	//center of mass of the node
 	//coordinate center;

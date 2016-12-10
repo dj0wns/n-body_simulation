@@ -20,10 +20,10 @@ struct coordinate{
 };
 
 struct body{
-	int id; //unique id for this object
-	double mass;
 	coordinate location;
 	coordinate velocity;
+	double mass;
+	int id; //unique id for this object
 	//one axis
 	body(double axis1, double vel1, double mass, int id) : 
 		location(axis1), velocity(vel1), mass(mass), id(id){};

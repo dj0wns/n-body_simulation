@@ -11,6 +11,7 @@
 
 bool read_infile(char* path, Octree<body> &structure, int &num_dim);
 
+bool write_outfile(char* path, Octree<body> &structure, int &num_dim);
 
 
 
