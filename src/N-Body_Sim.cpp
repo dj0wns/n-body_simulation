@@ -47,6 +47,7 @@ int main(int argc, char ** argv){
 }
 
 void execute(Octree<body> &octree, int num_dim, int iterations, double time_step){
+	//iterate through all unique pairs of items in the set
 	for(auto it = octree.object_list.begin(); it < octree.object_list.end(); ++it){
 		for(auto it2 = it+1; it2 < octree.object_list.end(); ++it2){
 			calculate_gravitational_velocity_change(*it, *it2, num_dim, time_step);

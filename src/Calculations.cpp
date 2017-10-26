@@ -1,6 +1,6 @@
 #include "Calculations.h"
 
-double calculate_distance (body &lhs, body &rhs, int num_dim){
+double calculate_distance (const body &lhs, const body &rhs, const int num_dim){
 
 	double distance = pow(std::abs(lhs.location.axis1-rhs.location.axis1),2);  
 	switch(num_dim){
@@ -13,17 +13,17 @@ double calculate_distance (body &lhs, body &rhs, int num_dim){
 	return distance;
 }
 
-double calculate_force (body &lhs, body &rhs, double distance_inverse){
+double calculate_force (const body &lhs, const body &rhs, const double distance_inverse){
 	double force = lhs.mass * rhs.mass * GRAVITATIONAL_CONSTANT * distance_inverse;
 	return force;	
 }
 
-void calculate_gravitational_velocity_change(body &lhs, body &rhs, int num_dim, double time_step){
+void calculate_gravitational_velocity_change(body &lhs, body &rhs, const int num_dim, const double time_step){
 	double axis1, axis2, axis3;
 	double distance, force;
 	double distance_inverse;
 	distance = calculate_distance(lhs, rhs, num_dim);
-	distance_inverse = 1/distance;
+	distance_inverse = 1./distance;
 
 	force = calculate_force(lhs,rhs, distance_inverse);
 	//calculate velocity change as a result of that force 
@@ -37,6 +37,7 @@ void calculate_gravitational_velocity_change(body &lhs, body &rhs, int num_dim, 
 			axis3 *= distance_inverse;
 			rhs.velocity.axis3 += axis3 * force * time_step;
 			lhs.velocity.axis3 += -axis3 * force * time_step;
+		//falls through
 		case 2:
 			axis2 = lhs.location.axis2-rhs.location.axis2;
 			axis2 *= distance_inverse;

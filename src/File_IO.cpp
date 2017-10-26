@@ -2,20 +2,20 @@
 #include <string>
 #include <cstring>
 #include <algorithm>
+#include <cstdlib>
 
 bool write_logfile(char* path, Octree<body> &structure, int step, int &num_dim){
 	std::ofstream fout;
 	std::string temp = path;
-
-	//TODO: add code to append step to log file
-	//	temp += "_" + itoa(step);
-	fout.open(temp);
 	char output[256];
+	sprintf(output,"%s_%04d.dat",path,step);
+	fout.open(output);
 	for(auto it = structure.object_list.begin(); it < structure.object_list.end(); ++it){
 		it->toString(num_dim, output);	
 		fout << output;
 
 	}
+	fout.close();
 	return true;
 }
 
@@ -33,6 +33,7 @@ bool write_outfile(char* path, Octree<body> &structure, int &num_dim){
 		fout << output;
 
 	}
+	fout.close();
 	return true;
 }
 
@@ -87,6 +88,7 @@ bool read_infile(char* path, Octree<body> &structure, int &num_dim){
 				return false;
 		}
 	}
+	fin.close();
 	return true;
 }
 
