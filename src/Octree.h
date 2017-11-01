@@ -115,7 +115,7 @@ public:
       }
     }
     //if children increases number of leaves by 50% or more its not worth splitting
-    if (count >= 5.5 * leaves.size())
+    if (count >= 1.5 * leaves.size())
     {
       leaf_node = true;
       //TODO delete children
