@@ -5,16 +5,18 @@ ARGS=-Wall -O0
 STANDARD=-std=c++11
 OUTFILE=bin/n-body_sim
 
-release: obj/Octree.o obj/Body.o obj/File_IO.o  obj/Calculations.o obj/N-Body_Sim.o
+release: obj/Body.o obj/File_IO.o  obj/Calculations.o obj/N-Body_Sim.o
 	$(COMPILER) $(ARGS) $(STANDARD) -o $(OUTFILE) obj/*.o 
+
 obj/N-Body_Sim.o: src/N-Body_Sim.cpp
 	$(COMPILER) $(ARGS) $(STANDARD) -c -o obj/N-Body_Sim.o src/N-Body_Sim.cpp
-obj/Octree.o: src/Octree.cpp
-	$(COMPILER) $(ARGS) $(STANDARD) -c -o obj/Octree.o src/Octree.cpp
+
 obj/Body.o: src/Body.cpp
 	$(COMPILER) $(ARGS) $(STANDARD) -c -o obj/Body.o src/Body.cpp
+
 obj/File_IO.o: src/File_IO.cpp
 	$(COMPILER) $(ARGS) $(STANDARD) -c -o obj/File_IO.o src/File_IO.cpp
+
 obj/Calculations.o: src/Calculations.cpp
 	$(COMPILER) $(ARGS) $(STANDARD) -c -o obj/Calculations.o src/Calculations.cpp
 

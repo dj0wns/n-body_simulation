@@ -3,13 +3,13 @@
 #expected format:
 
 #[num dimensions] [num entries]
-#[dims, whitespace separated, in meters] [initial velocity, m/s] [mass in kg] [unique ID]
+#[dims, whitespace separated, in meters] [initial velocity, m/s] [mass in kg] [radius in m] [unique ID]
 
 example:
 3 100
-11.0	22.3	242.1	0	0	0	550	1
-43.1	454.2	-23.5	0	0	0	200	2
+11.0	22.3	242.1	0	0	0	550 50	1
+43.1	454.2	-23.5	0	0	0	200 45	2
 
 ...
 
-43.2	452.1	12.5	0	0	0	40000	100
+43.2	452.1	12.5	0	0	0	40000 200	100
