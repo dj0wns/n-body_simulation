@@ -122,6 +122,12 @@ public:
       return;
 
     }
+    for ( auto it = children.begin(); it < children.end(); ++it){
+      if ( (*it)->leaves.size() >= leaves.size() ){
+        leaf_node = true;
+        return;
+      }
+    }
 
     //leaves.clear();
     for ( auto it = children.begin(); it < children.end(); ++it){
