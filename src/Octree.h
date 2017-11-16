@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <cstdio>
+#include <cmath>
 #include "Body.h"
 
 #include <algorithm>
@@ -16,19 +17,18 @@ public:
 	std::vector<T> *object_list; //contains list of all objects - shared among all instances of Octree
 	std::vector<T*> leaves; //should be empty unless a leaf node
 
-
 	//default constructor
 	Octree() : leaf_node(false) {};
 	
   //default constructor
-	Octree( std::vector<T> *object_list) : object_list(object_list), leaf_node(false){};
+	Octree( std::vector<T> *object_list) : object_list(object_list), leaf_node(false) {};
 
   //print stats about tree
 	void print(int iteration){
 		printf("At iteration %d, the octree has a depth of %d and contains %d leaves. Most leaves in a single node: %d\n", 
         iteration, maxDepth(), totalLeaves(), maxLeaves());
 	}
-  
+
   int totalLeaves(){
     int total = 0;
     getTotalLeaves(total);
@@ -136,7 +136,119 @@ public:
     
   }
   
-  void checkCollisions(int iterations, int num_dim){
+  //Use quadratic formula to solve for the time at with the distance between lhs and rhs is equal to the sum of their radii
+  bool testCollision(T &lhs, T &rhs, int num_dim, float timestep){
+    double a, b, c;
+    double first, second;
+
+    switch(num_dim){
+      case 3:
+        printf("3D Collision not yet implemented!\n");
+        break;
+      case 2:
+        a = (lhs.velocity.axis1 * lhs.velocity.axis1)
+            + (rhs.velocity.axis1 * rhs.velocity.axis1)
+            + (lhs.velocity.axis2 * lhs.velocity.axis2)
+            + (rhs.velocity.axis2 * rhs.velocity.axis2)
+            - 2 * (lhs.velocity.axis1 * rhs.velocity.axis1)
+            - 2 * (lhs.velocity.axis2 * rhs.velocity.axis2);
+        b = 2 * (lhs.location.axis1 * lhs.velocity.axis1)
+            + 2 * (rhs.location.axis1 * rhs.velocity.axis1)
+            + 2 * (lhs.location.axis2 * lhs.velocity.axis2)
+            + 2 * (rhs.location.axis2 * rhs.velocity.axis2)
+            - 2 * (lhs.location.axis1 * rhs.velocity.axis1)
+            - 2 * (rhs.location.axis1 * lhs.velocity.axis1)
+            - 2 * (lhs.location.axis2 * rhs.velocity.axis2)
+            - 2 * (rhs.location.axis2 * lhs.velocity.axis2);
+        c = (lhs.location.axis1 * lhs.location.axis1)
+            + (rhs.location.axis1 * rhs.location.axis1)
+            + (lhs.location.axis2 * lhs.location.axis2)
+            + (rhs.location.axis2 * rhs.location.axis2)
+            - 2 * (lhs.location.axis1 * rhs.location.axis1)
+            - 2 * (lhs.location.axis2 * rhs.location.axis2)
+            - (lhs.radius * lhs.radius)
+            - 2 * (lhs.radius * rhs.radius)
+            - (rhs.radius * rhs.radius);
+        break;
+    }
+    //verify math is legal
+    double tempSQ = (b*b) - 4 * a * c;
+    if (tempSQ < 0) {
+      //no collision found, sqrt is imaginary
+      return false;
+    }
+    double tempDenom = 2 * a;
+    if (tempDenom == 0) {
+      //no collision found, divide by 0
+      return false;
+    }
+
+    //optimization
+    tempDenom = 1/tempDenom;
+
+    //quadratic formula
+    first = (-b + sqrt( tempSQ )) * tempDenom;
+    second = (-b - sqrt( tempSQ )) * tempDenom;
+    
+    if (first > 0 && second > 0){
+      if ( first <= second ) {
+        if (first < timestep){
+          printf("Collision found between %d and %d at t = %f\n", lhs.id, rhs.id, first );
+        } else {
+          //no collision found, first outside of timestep
+          return false;
+        }
+      } else {
+        if (second < timestep){
+          printf("Collision found between %d and %d at t = %f\n", lhs.id, rhs.id, second );
+        } else {
+          //no collision found, second outside of timestep
+          return false;
+        }
+      }
+
+    } else if (first > 0){
+        if (first < timestep){
+          printf("Collision found between %d and %d at t = %f\n", lhs.id, rhs.id, first );
+        } else {
+          //no collision found, first outside of timestep
+          return false;
+        }
+    } else if (second > 0){
+        if (second < timestep){
+          printf("Collision found between %d and %d at t = %f\n", lhs.id, rhs.id, second );
+        } else {
+          //no collision found, second outside of timestep
+          return false;
+        }
+    } else {
+      //no collision found, both values negative
+      return false;
+    }
+
+    //verify by testing distance in distance formula
+    double distance_formula_first, distance_formula_second;
+    switch (num_dim){
+      case 3:
+        printf("3D Collision not yet implemented!\n");
+        break;
+      case 2:
+        distance_formula_first = pow(lhs.location.axis1 + lhs.velocity.axis1 * first - rhs.location.axis1 - rhs.velocity.axis1 * first, 2.)
+                  + pow(lhs.location.axis2 + lhs.velocity.axis2 * first - rhs.location.axis2 - rhs.velocity.axis2 * first, 2.);
+        distance_formula_second = pow(lhs.location.axis1 + lhs.velocity.axis1 * second - rhs.location.axis1 - rhs.velocity.axis1 * second, 2.)
+                  + pow(lhs.location.axis2 + lhs.velocity.axis2 * second - rhs.location.axis2 - rhs.velocity.axis2 * second, 2.);
+        distance_formula_first = sqrt(distance_formula_first);
+        distance_formula_second = sqrt(distance_formula_second);
+        printf("Radius1 = %f; Radius2 = %f; Sum = %f\n", lhs.radius, rhs.radius, lhs.radius + rhs.radius);
+        printf("Result of distance formula: first = %f, second = %f\n",distance_formula_first, distance_formula_second);
+        printf("Collision Time: first = %f, second = %f\n", first, second);
+        break;
+    }
+
+    return true;
+  }
+
+  void checkCollisions(int iterations, int num_dim, float timestep){
     if(leaf_node){
       for ( auto it = leaves.begin(); it < leaves.end(); ++it){
         for ( auto it2 = it+1; it2 < leaves.end(); ++it2){
@@ -156,8 +268,12 @@ public:
               || (*it2)->boundingBox.origin.axis3 + (*it2)->boundingBox.edgeLengths.axis3 
                   < (*it)->boundingBox.origin.axis3))
             {
-              printf("Collision possible at Iteration: %d between objects %d and %d\n", 
-                  iterations, (*it)->id, (*it2)->id);
+              //printf("Collision possible at Iteration: %d between objects %d and %d\n", 
+              //    iterations, (*it)->id, (*it2)->id);
+              if(testCollision(*(*it), *(*it2), num_dim, timestep)){
+                //TODO
+
+              }
             }
 
 
@@ -173,8 +289,16 @@ public:
               || (*it2)->boundingBox.origin.axis2 + (*it2)->boundingBox.edgeLengths.axis2 
                   < (*it)->boundingBox.origin.axis2))
             {
-              printf("Collision possible at Iteration: %d between objects %d and %d\n", 
-                  iterations, (*it)->id, (*it2)->id);
+              //printf("Collision possible at Iteration: %d between objects %d and %d\n", 
+              //    iterations, (*it)->id, (*it2)->id);
+              //if collision, mark second object to be removed and add mass and energy and calculate new trajectory
+              if(testCollision(*(*it), *(*it2), num_dim, timestep)){
+                (*it2)->toDelete = true;
+                //add mass
+                (*it)->mass += (*it2)->mass;
+                //combine area to find new radius
+                (*it)->radius = sqrt( pow((*it)->radius,2) + pow((*it2)->radius,2) );
+              }
             }
           break;
           }
@@ -182,7 +306,7 @@ public:
       }
     } else {
       for ( auto it = children.begin(); it < children.end(); ++it){
-        (*it)->checkCollisions(iterations, num_dim);
+        (*it)->checkCollisions(iterations, num_dim, timestep);
       }
     }
 
@@ -192,8 +316,8 @@ public:
 private:		
 	bool leaf_node;
   coordinate division;
-	std::vector<Octree<T>*> children; 
-  
+	std::vector<Octree<T>*> children;  
+
   void getMaxDepth(int current, int &max){
     if(current > max){
       max = current;
@@ -217,9 +341,6 @@ private:
     }
   }
 };
-
-
-
 
 
 #endif

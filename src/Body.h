@@ -53,19 +53,20 @@ struct body{
   double mass;
   double radius;
   int id; //unique id for this object
+  bool toDelete;
   //one axis
   body(double axis1, double vel1, double mass, double radius, int id) : 
-    location(axis1), velocity(vel1), mass(mass), radius(radius), id(id){};
+    location(axis1), velocity(vel1), mass(mass), radius(radius), id(id), toDelete(false){};
   //two axis
   body(double axis1, double axis2, 
       double vel1, double vel2, 
       double mass, double radius, int id) : 
-    location(axis1,axis2), velocity(vel1,vel2), mass(mass), radius(radius), id(id){};
+    location(axis1,axis2), velocity(vel1,vel2), mass(mass), radius(radius), id(id), toDelete(false){};
   //three axis
   body(double axis1, double axis2, double axis3,
       double vel1, double vel2, double vel3,  
       double mass, double radius, int id) : 
-    location(axis1,axis2,axis3), velocity(vel1, vel2, vel3),  mass(mass), radius(radius), id(id){};
+    location(axis1,axis2,axis3), velocity(vel1, vel2, vel3),  mass(mass), radius(radius), id(id), toDelete(false){};
   void toString(int num_dim, char* output);
   void print(int num_dim);
   void calculateBoundingBox(int num_dim, double time_step);

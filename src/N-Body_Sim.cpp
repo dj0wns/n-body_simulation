@@ -21,6 +21,7 @@ int main(int argc, char ** argv){
   }
 
   std::vector<body> object_list;
+
   int num_dim;
   int iterations = atoi(argv[3]);
   double time_step = atoi(argv[4]);
@@ -34,7 +35,7 @@ int main(int argc, char ** argv){
     write_logfile(argv[2], object_list, i+1, num_dim);
     //octree.print(i);
   } 
-
+  
   write_outfile(argv[2], object_list, num_dim);
 
   return 0;
@@ -58,9 +59,19 @@ void execute(Octree<body> &octree, std::vector<body> &object_list, int iteration
   }
   octree.create(num_dim);
   //check for collisions
-  octree.checkCollisions(iteration,num_dim);
+  octree.checkCollisions(iteration,num_dim,time_step);
   for(auto it = object_list.begin(); it < object_list.end(); ++it){
     it->step(num_dim, time_step);
   }
-  
+  std::vector<body> new_object_list;
+  for (auto it : object_list){
+    if( !it.toDelete){
+      new_object_list.emplace_back(it);
+    } else{
+      //maybe?
+    }
+  }
+  object_list.clear();
+  object_list = new_object_list;
+
 }
