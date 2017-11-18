@@ -294,8 +294,19 @@ public:
               //if collision, mark second object to be removed and add mass and energy and calculate new trajectory
               if(testCollision(*(*it), *(*it2), num_dim, timestep)){
                 (*it2)->toDelete = true;
+
+                //conservation of momentum??
+                coordinate lhsForce ((*it)->velocity.axis1 * (*it)->mass, (*it)->velocity.axis2 * (*it)->mass);
+                coordinate rhsForce ((*it2)->velocity.axis1 * (*it2)->mass, (*it2)->velocity.axis2 * (*it2)->mass);
+                lhsForce.axis1 += rhsForce.axis1;
+                lhsForce.axis2 += rhsForce.axis2;
                 //add mass
                 (*it)->mass += (*it2)->mass;
+                
+                //set new velocity
+                (*it)->velocity.axis1 = lhsForce.axis1 / (*it)->mass;
+                (*it)->velocity.axis2 = lhsForce.axis2 / (*it)->mass;
+
                 //combine area to find new radius
                 (*it)->radius = sqrt( pow((*it)->radius,2) + pow((*it2)->radius,2) );
               }

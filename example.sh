@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./bin/n-body_sim ./input/sample_2d ./output/sample_2d 200 40000
+./bin/n-body_sim ./input/2d_gen ./output/sample_2d 1000 400000
