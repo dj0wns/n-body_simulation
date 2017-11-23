@@ -30,20 +30,20 @@ void calculate_gravitational_velocity_change(body &lhs, body &rhs, const int num
   //TODO consider doing integral of acceleration instead of instant speed boost
 	//directions are from rhs point of view, lhs will be the negative of rhs
 	axis1 = lhs.location.axis1-rhs.location.axis1;axis1 *= distance_inverse;
-	rhs.velocity.axis1 += axis1 * force * time_step / rhs.mass;
-	lhs.velocity.axis1 += -axis1 * force * time_step / lhs.mass;
+	rhs.addedVelocity.axis1 += axis1 * force * time_step / rhs.mass;
+	lhs.addedVelocity.axis1 += -axis1 * force * time_step / lhs.mass;
 	switch (num_dim){
 		case 3:
 			axis3 = lhs.location.axis3-rhs.location.axis3;
 			axis3 *= distance_inverse;
-			rhs.velocity.axis3 += axis3 * force * time_step / rhs.mass; 
-			lhs.velocity.axis3 += -axis3 * force * time_step / lhs.mass;
+			rhs.addedVelocity.axis3 += axis3 * force * time_step / rhs.mass; 
+			lhs.addedVelocity.axis3 += -axis3 * force * time_step / lhs.mass;
 		//falls through
 		case 2:
 			axis2 = lhs.location.axis2-rhs.location.axis2;
 			axis2 *= distance_inverse;
-			rhs.velocity.axis2 += axis2 * force * time_step / rhs.mass;
-			lhs.velocity.axis2 += -axis2 * force * time_step / lhs.mass;
+			rhs.addedVelocity.axis2 += axis2 * force * time_step / rhs.mass;
+			lhs.addedVelocity.axis2 += -axis2 * force * time_step / lhs.mass;
 	}
 
 

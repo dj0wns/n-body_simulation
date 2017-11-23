@@ -143,23 +143,23 @@ public:
 
     switch(num_dim){
       case 3:
-        printf("3D Collision not yet implemented!\n");
+        //printf("3D Collision not yet implemented!\n");
         break;
       case 2:
-        a = (lhs.velocity.axis1 * lhs.velocity.axis1)
-            + (rhs.velocity.axis1 * rhs.velocity.axis1)
-            + (lhs.velocity.axis2 * lhs.velocity.axis2)
-            + (rhs.velocity.axis2 * rhs.velocity.axis2)
-            - 2 * (lhs.velocity.axis1 * rhs.velocity.axis1)
-            - 2 * (lhs.velocity.axis2 * rhs.velocity.axis2);
-        b = 2 * (lhs.location.axis1 * lhs.velocity.axis1)
-            + 2 * (rhs.location.axis1 * rhs.velocity.axis1)
-            + 2 * (lhs.location.axis2 * lhs.velocity.axis2)
-            + 2 * (rhs.location.axis2 * rhs.velocity.axis2)
-            - 2 * (lhs.location.axis1 * rhs.velocity.axis1)
-            - 2 * (rhs.location.axis1 * lhs.velocity.axis1)
-            - 2 * (lhs.location.axis2 * rhs.velocity.axis2)
-            - 2 * (rhs.location.axis2 * lhs.velocity.axis2);
+        a = ((lhs.velocity.axis1 + 0.5 * lhs.addedVelocity.axis1) * (lhs.velocity.axis1 + 0.5 * lhs.addedVelocity.axis1))
+            + ((rhs.velocity.axis1 + 0.5 * rhs.addedVelocity.axis1) * (rhs.velocity.axis1 + 0.5 * rhs.addedVelocity.axis1))
+            + ((lhs.velocity.axis2 + 0.5 * lhs.addedVelocity.axis2) * (lhs.velocity.axis2 + 0.5 * lhs.addedVelocity.axis2))
+            + ((rhs.velocity.axis2 + 0.5 * rhs.addedVelocity.axis2) * (rhs.velocity.axis2 + 0.5 * rhs.addedVelocity.axis2))
+            - 2 * ((lhs.velocity.axis1 + 0.5 * lhs.addedVelocity.axis1) * (rhs.velocity.axis1 + 0.5 * rhs.addedVelocity.axis1))
+            - 2 * ((lhs.velocity.axis2 + 0.5 * lhs.addedVelocity.axis2) * (rhs.velocity.axis2 + 0.5 * rhs.addedVelocity.axis2));
+        b = 2 * (lhs.location.axis1 * (lhs.velocity.axis1 + 0.5 * lhs.addedVelocity.axis1))
+            + 2 * (rhs.location.axis1 * (rhs.velocity.axis1 + 0.5 * rhs.addedVelocity.axis1))
+            + 2 * (lhs.location.axis2 * (lhs.velocity.axis2 + 0.5 * lhs.addedVelocity.axis2))
+            + 2 * (rhs.location.axis2 * (rhs.velocity.axis2 + 0.5 * rhs.addedVelocity.axis2))
+            - 2 * (lhs.location.axis1 * (rhs.velocity.axis1 + 0.5 * rhs.addedVelocity.axis1))
+            - 2 * (rhs.location.axis1 * (lhs.velocity.axis1 + 0.5 * lhs.addedVelocity.axis1))
+            - 2 * (lhs.location.axis2 * (rhs.velocity.axis2 + 0.5 * rhs.addedVelocity.axis2))
+            - 2 * (rhs.location.axis2 * (lhs.velocity.axis2 + 0.5 * lhs.addedVelocity.axis2));
         c = (lhs.location.axis1 * lhs.location.axis1)
             + (rhs.location.axis1 * rhs.location.axis1)
             + (lhs.location.axis2 * lhs.location.axis2)
@@ -193,14 +193,14 @@ public:
     if (first > 0 && second > 0){
       if ( first <= second ) {
         if (first < timestep){
-          printf("Collision found between %d and %d at t = %f\n", lhs.id, rhs.id, first );
+          //printf("Collision found between %d and %d at t = %f\n", lhs.id, rhs.id, first );
         } else {
           //no collision found, first outside of timestep
           return false;
         }
       } else {
         if (second < timestep){
-          printf("Collision found between %d and %d at t = %f\n", lhs.id, rhs.id, second );
+          //printf("Collision found between %d and %d at t = %f\n", lhs.id, rhs.id, second );
         } else {
           //no collision found, second outside of timestep
           return false;
@@ -209,14 +209,14 @@ public:
 
     } else if (first > 0){
         if (first < timestep){
-          printf("Collision found between %d and %d at t = %f\n", lhs.id, rhs.id, first );
+          //printf("Collision found between %d and %d at t = %f\n", lhs.id, rhs.id, first );
         } else {
           //no collision found, first outside of timestep
           return false;
         }
     } else if (second > 0){
         if (second < timestep){
-          printf("Collision found between %d and %d at t = %f\n", lhs.id, rhs.id, second );
+          //printf("Collision found between %d and %d at t = %f\n", lhs.id, rhs.id, second );
         } else {
           //no collision found, second outside of timestep
           return false;
@@ -230,18 +230,29 @@ public:
     double distance_formula_first, distance_formula_second;
     switch (num_dim){
       case 3:
-        printf("3D Collision not yet implemented!\n");
+        //printf("3D Collision not yet implemented!\n");
         break;
       case 2:
-        distance_formula_first = pow(lhs.location.axis1 + lhs.velocity.axis1 * first - rhs.location.axis1 - rhs.velocity.axis1 * first, 2.)
-                  + pow(lhs.location.axis2 + lhs.velocity.axis2 * first - rhs.location.axis2 - rhs.velocity.axis2 * first, 2.);
-        distance_formula_second = pow(lhs.location.axis1 + lhs.velocity.axis1 * second - rhs.location.axis1 - rhs.velocity.axis1 * second, 2.)
-                  + pow(lhs.location.axis2 + lhs.velocity.axis2 * second - rhs.location.axis2 - rhs.velocity.axis2 * second, 2.);
+        distance_formula_first = pow(
+                  lhs.location.axis1 + (lhs.velocity.axis1 + 0.5 * lhs.addedVelocity.axis1) * first 
+                  - rhs.location.axis1 
+                  - (rhs.velocity.axis1 + 0.5 * rhs.addedVelocity.axis1) * first, 2.)
+                + pow(
+                  lhs.location.axis2 
+                  + lhs.velocity.axis2 * first 
+                  - rhs.location.axis2 
+                  - (rhs.velocity.axis2 + 0.5 * rhs.addedVelocity.axis2) * first, 2.);
+        distance_formula_second = pow(lhs.location.axis1 + (lhs.velocity.axis1 + 0.5 * lhs.addedVelocity.axis1) * second 
+                  - rhs.location.axis1 - (rhs.velocity.axis1 + 0.5 * rhs.addedVelocity.axis1) * second, 2.)
+                  + pow(lhs.location.axis2 
+                  + (lhs.velocity.axis2 + 0.5 * lhs.addedVelocity.axis2) * second 
+                  - rhs.location.axis2 
+                  - (rhs.velocity.axis2 + 0.5 * rhs.addedVelocity.axis2) * second, 2.);
         distance_formula_first = sqrt(distance_formula_first);
         distance_formula_second = sqrt(distance_formula_second);
-        printf("Radius1 = %f; Radius2 = %f; Sum = %f\n", lhs.radius, rhs.radius, lhs.radius + rhs.radius);
-        printf("Result of distance formula: first = %f, second = %f\n",distance_formula_first, distance_formula_second);
-        printf("Collision Time: first = %f, second = %f\n", first, second);
+//        printf("Radius1 = %f; Radius2 = %f; Sum = %f\n", lhs.radius, rhs.radius, lhs.radius + rhs.radius);
+//        printf("Result of distance formula: first = %f, second = %f\n",distance_formula_first, distance_formula_second);
+//        printf("Collision Time: first = %f, second = %f\n", first, second);
         break;
     }
 
@@ -252,6 +263,10 @@ public:
     if(leaf_node){
       for ( auto it = leaves.begin(); it < leaves.end(); ++it){
         for ( auto it2 = it+1; it2 < leaves.end(); ++it2){
+          //if either object is deleted dont bother detecting collision
+          if ((*it)->toDelete || (*it2)->toDelete){
+            continue;
+          }
           switch (num_dim){
           case 3:
             if(!(
@@ -294,7 +309,6 @@ public:
               //if collision, mark second object to be removed and add mass and energy and calculate new trajectory
               if(testCollision(*(*it), *(*it2), num_dim, timestep)){
                 (*it2)->toDelete = true;
-
                 //conservation of momentum??
                 coordinate lhsForce ((*it)->velocity.axis1 * (*it)->mass, (*it)->velocity.axis2 * (*it)->mass);
                 coordinate rhsForce ((*it2)->velocity.axis1 * (*it2)->mass, (*it2)->velocity.axis2 * (*it2)->mass);

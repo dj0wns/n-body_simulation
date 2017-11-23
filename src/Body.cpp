@@ -48,34 +48,43 @@ void body::toString(int num_dim, char* output){
 }
 
 void body::calculateBoundingBox(int num_dim, double time_step){
-  boundingBox.origin.axis1 = location.axis1 - radius *(double)((velocity.axis1<0)*-2+1);
+  boundingBox.origin.axis1 = location.axis1 - radius *(double)((velocity.axis1 + 0.5*addedVelocity.axis1<0)*-2+1);
   boundingBox.edgeLengths.axis1 = boundingBox.origin.axis1 
-      + 2*radius *(double)((velocity.axis1<0)*-2+1) 
-      + velocity.axis1 * time_step
+      + 2*radius *(double)((velocity.axis1 + 0.5*addedVelocity.axis1<0)*-2+1) 
+      + velocity.axis1 * time_step 
+      + addedVelocity.axis1 * time_step * 0.5
       - boundingBox.origin.axis1;
   switch (num_dim){
     case 3:
-      boundingBox.origin.axis3 = location.axis3 - radius *(double)((velocity.axis3<0)*-2+1);
+      boundingBox.origin.axis3 = location.axis3 - radius *(double)((velocity.axis3 + 0.5*addedVelocity.axis3<0)*-2+1);
       boundingBox.edgeLengths.axis3 = boundingBox.origin.axis3 
-          + 2*radius *(double)((velocity.axis3<0)*-2+1) 
+          + 2*radius *(double)((velocity.axis3 + 0.5*addedVelocity.axis3<0)*-2+1) 
           + velocity.axis3 * time_step
+          + addedVelocity.axis3 * time_step * 0.5
           - boundingBox.origin.axis3;
     case 2:
-      boundingBox.origin.axis2 = location.axis2 - radius *(double)((velocity.axis2<0)*-2+1);
+      boundingBox.origin.axis2 = location.axis2 - radius *(double)((velocity.axis2 + 0.5*addedVelocity.axis2<0)*-2+1);
       boundingBox.edgeLengths.axis2 = boundingBox.origin.axis2 
-          + 2*radius *(double)((velocity.axis2<0)*-2+1) 
+          + 2*radius *(double)((velocity.axis2 + 0.5*addedVelocity.axis2<0)*-2+1) 
           + velocity.axis2 * time_step
+          + addedVelocity.axis2 * time_step * 0.5
           - boundingBox.origin.axis2;
   }
 }
 
 void body::step(int num_dim, double time_step){
-  location.axis1 += velocity.axis1*time_step;
+  location.axis1 += velocity.axis1*time_step + addedVelocity.axis1 * time_step * 0.5;
+  velocity.axis1 += addedVelocity.axis1;
+  addedVelocity.axis1=0;
   switch (num_dim){
     case 3:
-    location.axis3 += velocity.axis3*time_step;
+    location.axis3 += velocity.axis3*time_step + addedVelocity.axis3 * time_step * 0.5;
+    velocity.axis3 += addedVelocity.axis3;
+    addedVelocity.axis3=0;
     case 2:
-    location.axis2 += velocity.axis2*time_step;
+    location.axis2 += velocity.axis2*time_step + addedVelocity.axis2 * time_step * 0.5;
+    velocity.axis2 += addedVelocity.axis2;
+    addedVelocity.axis2=0;
   }
 }
 
