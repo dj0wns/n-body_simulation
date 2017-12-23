@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <vector>
 
-bool write_logfile(char* path, std::vector<body> &object_list, int step, int &num_dim){
+bool write_logfile(const char* path, std::vector<body> &object_list, int step, uint32_t &num_dim){
 	std::ofstream fout;
 	std::string temp = path;
 	char output[256];
@@ -22,7 +22,7 @@ bool write_logfile(char* path, std::vector<body> &object_list, int step, int &nu
 
 
 
-bool write_outfile(char* path, std::vector<body> &object_list, int &num_dim){
+bool write_outfile(const char* path, std::vector<body> &object_list, uint32_t &num_dim){
 	std::ofstream fout;
 	fout.open(path);
 	char output[256];
@@ -38,7 +38,7 @@ bool write_outfile(char* path, std::vector<body> &object_list, int &num_dim){
 	return true;
 }
 
-bool read_infile(char* path, std::vector<body> &object_list, int &num_dim){
+bool read_infile(const char* path, std::vector<body> &object_list, uint32_t &num_dim){
 	std::ifstream fin;
 	int num_entries;
 	double axis1, axis2, axis3, mass;

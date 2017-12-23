@@ -6,6 +6,7 @@
 #include <vector>
 #include <cstdio>
 #include <cmath>
+#include <cctype>
 #include "Body.h"
 
 #include <algorithm>
@@ -54,11 +55,11 @@ public:
   }
  
   //recursively build the tree by subdividing the space
-  void create(int num_dim){
+  void create(uint32_t num_dim){
     //calculate average  of bounding box middle for split - should be good enough
     int count = 0;
     //if too few objects not worth splitting
-    if(leaves.size() <= 2<<(num_dim-1)){
+    if(leaves.size() <= (uint32_t)2<<(num_dim-1)){
       leaf_node = true;
       return;
     }
@@ -94,7 +95,7 @@ public:
             int axis3= (*it)->boundingBox.origin.axis3 + (*it)->boundingBox.edgeLengths.axis3*((i>>2)%2);
             std::vector<T*> tempLeaves = children[(axis1>division.axis1)*1 
                 + (axis2>division.axis2)*2 
-                + (axis2>division.axis3)*4]->leaves;
+                + (axis3>division.axis3)*4]->leaves;
             if (std::find(tempLeaves.begin(), tempLeaves.end(), *it) ==  tempLeaves.end()){
               tempLeaves.emplace_back(*it);
               count++;
@@ -137,9 +138,9 @@ public:
   }
   
   //Use quadratic formula to solve for the time at with the distance between lhs and rhs is equal to the sum of their radii
-  bool testCollision(T &lhs, T &rhs, int num_dim, float timestep){
-    double a, b, c;
-    double first, second;
+  bool testCollision(T &lhs, T &rhs, uint32_t num_dim, float timestep){
+    double a=0, b=0, c=0;
+    double first=0, second=0;
 
     switch(num_dim){
       case 3:
@@ -259,7 +260,7 @@ public:
     return true;
   }
 
-  void checkCollisions(int iterations, int num_dim, float timestep){
+  void checkCollisions(int iterations, uint32_t num_dim, float timestep){
     if(leaf_node){
       for ( auto it = leaves.begin(); it < leaves.end(); ++it){
         for ( auto it2 = it+1; it2 < leaves.end(); ++it2){
