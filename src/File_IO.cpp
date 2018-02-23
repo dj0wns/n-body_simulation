@@ -20,6 +20,21 @@ bool write_logfile(const char* path, std::vector<body> &object_list, int step, u
 	return true;
 }
 
+bool append_logfile(const char* path, std::vector<body> &object_list, int step, uint32_t &num_dim){
+	std::ofstream fout;
+	std::string temp = path;
+	char output[256];
+	sprintf(output,"%s_%04d.dat",path,step);
+	fout.open(output, std::ofstream::out | std::ofstream::app);
+	for(auto it = object_list.begin(); it < object_list.end(); ++it){
+		it->toString(num_dim, output);	
+		fout << output;
+
+	}
+	fout.close();
+	return true;
+}
+
 
 
 bool write_outfile(const char* path, std::vector<body> &object_list, uint32_t &num_dim){

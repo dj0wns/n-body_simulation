@@ -28,7 +28,6 @@ void calculate_gravitational_velocity_change(body &lhs, body &rhs, const uint32_
 
 	force = calculate_force(lhs,rhs, distance_inverse_squared);
 	//calculate velocity change as a result of that force 
-  //TODO consider doing integral of acceleration instead of instant speed boost
 	//directions are from rhs point of view, lhs will be the negative of rhs
 	axis1 = lhs.location.axis1-rhs.location.axis1;
   axis1 *= distance_inverse;

@@ -1,7 +1,7 @@
 all: release
 
-COMPILER=g++
-ARGS=-Wall -O3 -g
+COMPILER=mpicxx
+ARGS=-Wall -O3 -g 
 STANDARD=-std=c++11
 OUTFILE=bin/n-body_sim
 

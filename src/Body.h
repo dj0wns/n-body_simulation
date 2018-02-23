@@ -55,6 +55,8 @@ struct body{
   double radius;
   int id; //unique id for this object
   bool toDelete;
+  body () :
+    location(), velocity(), addedVelocity(), mass(0), radius(0), id(-1), toDelete(false){};
   //one axis
   body(double axis1, double vel1, double mass, double radius, int id) : 
     location(axis1), velocity(vel1), addedVelocity(0), mass(mass), radius(radius), id(id), toDelete(false){};

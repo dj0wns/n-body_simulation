@@ -15,6 +15,7 @@ bool read_infile(const char* path, std::vector<body> &object_list, uint32_t &num
 bool write_outfile(const char* path, std::vector<body> &object_list, uint32_t &num_dim);
 
 bool write_logfile(const char* path, std::vector<body> &object_list, int step, uint32_t &num_dim);
+bool append_logfile(const char* path, std::vector<body> &object_list, int step, uint32_t &num_dim);
 
 
 
