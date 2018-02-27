@@ -15,14 +15,14 @@
 template <typename T> class Octree  {
 public:
 	//use emplace to add objects to list - avoid copy 
-	std::vector<T> *object_list; //contains list of all objects - shared among all instances of Octree
+	T *object_list; //contains list of all objects - shared among all instances of Octree
 	std::vector<T*> leaves; //should be empty unless a leaf node
 
 	//default constructor
 	Octree() : leaf_node(false) {};
 	
   //default constructor
-	Octree( std::vector<T> *object_list) : object_list(object_list), leaf_node(false) {};
+	Octree( T *object_list) : object_list(object_list), leaf_node(false) {};
 
   //print stats about tree
 	void print(int iteration){
@@ -138,7 +138,7 @@ public:
   }
   
   //Use quadratic formula to solve for the time at with the distance between lhs and rhs is equal to the sum of their radii
-  bool testCollision(T &lhs, T &rhs, uint32_t num_dim, float timestep){
+  bool testCollision(T &lhs, T &rhs, uint32_t num_dim, double timestep){
     double a=0, b=0, c=0;
     double first=0, second=0;
 
@@ -260,7 +260,7 @@ public:
     return true;
   }
 
-  void checkCollisions(int iterations, uint32_t num_dim, float timestep){
+  void checkCollisions(int iterations, uint32_t num_dim, double timestep){
     if(leaf_node){
       for ( auto it = leaves.begin(); it < leaves.end(); ++it){
         for ( auto it2 = it+1; it2 < leaves.end(); ++it2){

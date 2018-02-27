@@ -5,31 +5,29 @@
 #include <cstdlib>
 #include <vector>
 
-bool write_logfile(const char* path, std::vector<body> &object_list, int step, uint32_t &num_dim){
+bool write_logfile(const char* path, body *object_list, int length, int step, uint32_t &num_dim){
 	std::ofstream fout;
 	std::string temp = path;
 	char output[256];
 	sprintf(output,"%s_%04d.dat",path,step);
 	fout.open(output);
-	for(auto it = object_list.begin(); it < object_list.end(); ++it){
-		it->toString(num_dim, output);	
+  for(int i = 0; i < length; ++i){
+		object_list[i].toString(num_dim, output);	
 		fout << output;
-
 	}
 	fout.close();
 	return true;
 }
 
-bool append_logfile(const char* path, std::vector<body> &object_list, int step, uint32_t &num_dim){
+bool append_logfile(const char* path, body *object_list, int length, int step, uint32_t &num_dim){
 	std::ofstream fout;
 	std::string temp = path;
 	char output[256];
 	sprintf(output,"%s_%04d.dat",path,step);
 	fout.open(output, std::ofstream::out | std::ofstream::app);
-	for(auto it = object_list.begin(); it < object_list.end(); ++it){
-		it->toString(num_dim, output);	
+  for(int i = 0; i < length; ++i){
+		object_list[i].toString(num_dim, output);	
 		fout << output;
-
 	}
 	fout.close();
 	return true;
@@ -37,23 +35,22 @@ bool append_logfile(const char* path, std::vector<body> &object_list, int step, 
 
 
 
-bool write_outfile(const char* path, std::vector<body> &object_list, uint32_t &num_dim){
+bool write_outfile(const char* path, body *object_list, int length, uint32_t &num_dim){
 	std::ofstream fout;
 	fout.open(path);
 	char output[256];
 
-	fout << num_dim << "\t" << object_list.size() << "\n";
+	fout << num_dim << "\t" << length << "\n";
 
-	for(auto it = object_list.begin(); it < object_list.end(); ++it){
-		it->toString(num_dim, output);	
+  for(int i = 0; i < length; ++i){
+		object_list[i].toString(num_dim, output);	
 		fout << output;
-
 	}
 	fout.close();
 	return true;
 }
 
-bool read_infile(const char* path, std::vector<body> &object_list, uint32_t &num_dim){
+bool read_infile(const char* path, body **object_list, int *length, uint32_t &num_dim){
 	std::ifstream fin;
 	int num_entries;
 	double axis1, axis2, axis3, mass;
@@ -69,8 +66,8 @@ bool read_infile(const char* path, std::vector<body> &object_list, uint32_t &num
 	} else {
 		return false;
 	}
-	object_list.clear();
-	object_list.reserve(num_entries);
+  *length = num_entries;
+	*object_list =(body*) malloc(num_entries * sizeof(body));
 
 	for(int i = 0; i < num_entries && fin.good(); i++){
 		switch(num_dim){
@@ -80,7 +77,7 @@ bool read_infile(const char* path, std::vector<body> &object_list, uint32_t &num
 				fin >> mass;
         fin >> radius;
 				fin >> id;
-				object_list.emplace_back(body(axis1, vel1,  mass, radius, id));
+        (*object_list)[i] = body(axis1, vel1, mass, radius, id);
 				break;
 			case 2:
 				fin >> axis1;
@@ -90,7 +87,7 @@ bool read_infile(const char* path, std::vector<body> &object_list, uint32_t &num
 				fin >> mass;
         fin >> radius;
 				fin >> id;
-				object_list.emplace_back(body(axis1, axis2, vel1, vel2, mass, radius, id));
+				(*object_list)[i] = body(axis1, axis2, vel1, vel2, mass, radius, id);
 				break;
 			case 3:
 				fin >> axis1;
@@ -102,7 +99,7 @@ bool read_infile(const char* path, std::vector<body> &object_list, uint32_t &num
 				fin >> mass;
         fin >> radius;
 				fin >> id;
-				object_list.emplace_back(body(axis1, axis2, axis3, vel1, vel2, vel3, mass, radius, id));
+				(*object_list)[i] = body(axis1, axis2, axis3, vel1, vel2, vel3, mass, radius, id);
 				break;
 			default:
 				return false;

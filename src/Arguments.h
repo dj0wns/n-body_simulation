@@ -5,13 +5,15 @@ class Arguments {
   
   public:
 
-  Arguments() : inputPath(0), outputPath(0), collisionDetect(false), iterations(-1), timeStep(-1) {};
+  Arguments() : inputPath(0), outputPath(0), outputIterations(1), collisionDetect(false), iterations(-1), timeStep(-1) {};
 
   const char * inputPath;
   const char * outputPath;
-
+  
+  int outputIterations;
+  
   bool collisionDetect;
   
-  float iterations;
-  float timeStep;
+  double iterations;
+  double timeStep;
 };
