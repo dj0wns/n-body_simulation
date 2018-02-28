@@ -8,6 +8,7 @@ This demonstration consists of 8000 bodies with randomized initial positions and
 ![Demonstration of N-Body Sim](https://github.com/dj0wns/n-body_simulation/raw/master/visualization/animated.gif "Demonstration of N-Body sim with 4000 bodies and a timestep of 400000 seconds over 2000 iterations, 1 frame per 10 iterations")
 
 **Usage**
+
 ```
     bin/n-body_sim -i [Input File] -o [Output File] -t [time step] -n [number of iterations] -O [number of iterations per filewrite] [flags]
 	    Valid Flags:
